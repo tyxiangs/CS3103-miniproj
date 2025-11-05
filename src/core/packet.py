@@ -5,8 +5,11 @@ class GamePacket:
     def __init__(self, channel_type, seq_no, payload, timestamp=None):
         self.channel_type = channel_type
         self.seq_no = seq_no
-        self.timestamp = timestamp if timestamp else int(time.time() * 1000)
         self.payload = payload
+        if timestamp is None:
+            self.timestamp = int(time.time())
+        else:
+            self.timestamp = timestamp
     
     def to_bytes(self):
         """7-byte header"""

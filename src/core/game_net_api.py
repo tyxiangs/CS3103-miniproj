@@ -43,7 +43,7 @@ class GameNetAPI:
         self.receiver_thread = threading.Thread(target=self._receive_loop, daemon=True)
         self.receiver_thread.start()
 
-    def send(self, data, reliable=True):
+    def send(self, data, reliable=True, timestamp=None):
         """
         Send data with optional reliability
 
@@ -52,7 +52,7 @@ class GameNetAPI:
             reliable: If True, use reliable channel with ACK/retransmit
         """
         channel = CHANNEL_RELIABLE if reliable else CHANNEL_UNRELIABLE
-        packet = GamePacket(channel, self.next_seq, data)
+        packet = GamePacket(channel, self.next_seq, data, timestamp)
         packet_bytes = packet.to_bytes()
 
         # Send the packet
