@@ -5,6 +5,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from emulator.emulator import Emulator
+from src.apps.emulator_options import E1_PACKETLOSS, E1_DELAY, E1_JITTER, E2_PACKETLOSS, E2_DELAY, E2_JITTER
 from src.core.game_net_api import GameNetAPI
 import time
 import threading
@@ -102,8 +103,8 @@ def test_all_features():
     # Run test with threads
     receiver_thread = threading.Thread(target=test_receiver)
     sender_thread = threading.Thread(target=test_sender)
-    e1_thread = threading.Thread(target=start_emulator, args=(9999, "localhost", 8889, 0.2, 0.01, 0.005)).start()
-    e2_thread = threading.Thread(target=start_emulator, args=(9998, "localhost", 8888, 0, 0.01, 0.005)).start()
+    e1_thread = threading.Thread(target=start_emulator, args=(9999, "localhost", 8889, E1_PACKETLOSS, E1_DELAY, E1_JITTER)).start()
+    e2_thread = threading.Thread(target=start_emulator, args=(9998, "localhost", 8888, E2_PACKETLOSS, E2_DELAY, E2_JITTER)).start()
 
     receiver_thread.start()
     sender_thread.start()
