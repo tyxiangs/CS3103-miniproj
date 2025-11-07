@@ -117,6 +117,8 @@ class GameNetAPI:
                             acked_seq = int(packet.payload.split(':')[1])
 
 
+                            print(f"[LATENCY] ACK#{acked_seq}--- {latency} ms")
+
                             # Check if this is a duplicate ACK
                             if acked_seq == self.last_acked_seq:
                                 # Duplicate ACK - may trigger fast retransmit
@@ -125,10 +127,6 @@ class GameNetAPI:
                                 # New ACK - process normally
                                 self.reliable_channel.acknowledge(acked_seq)
                                 self.last_acked_seq = acked_seq
-
-
-                            print(f"[LATENCY] ACK#{acked_seq}--- {latency} ms")
-                            self.reliable_channel.acknowledge(acked_seq)
 
                             self.metrics['acks_received'] += 1
                         except:
@@ -139,7 +137,7 @@ class GameNetAPI:
                         # Send ACK immediately
                         ack_packet = GamePacket.create_ack(packet.seq_no)
                         print(f"[LATENCY] PKT#{packet.seq_no}--- {latency} ms")
-                        self.socket.sendto(ack_packet.to_bytes(), ("localhost", 9998))
+                        self.socket.sendto(ack_packet.to_bytes(), addr)
                         self.metrics['acks_sent'] += 1
                         print(f"[ACK] Sent ACK for packet R#{packet.seq_no}")
 
